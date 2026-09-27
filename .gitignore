@@ -1,0 +1,129 @@
+# =========================
+# Node / React
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+.vite/
+.cache/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# =========================
+# Tauri
+# =========================
+src-tauri/target/
+
+# Tauri generated bundles/installers
+src-tauri/target/release/bundle/
+src-tauri/target/debug/bundle/
+
+# =========================
+# Rust
+# =========================
+**/target/
+
+# Rust lock file
+# Keep Cargo.lock for applications
+# Cargo.lock
+
+# =========================
+# IDE / Editors
+# =========================
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+
+.idea/
+*.iml
+
+# =========================
+# Windows
+# =========================
+Thumbs.db
+Desktop.ini
+
+# =========================
+# macOS
+# =========================
+.DS_Store
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+
+# =========================
+# OS / Editor
+# =========================
+*.orig
+
+# =========================
+# Local database / patient data
+# =========================
+*.db
+*.sqlite
+*.sqlite3
+
+# Local application data
+data/
+local-data/
+storage/
+
+# =========================
+# Patient / Medical Files
+# DO NOT commit real patient data
+# =========================
+patients/
+patient-data/
+medical-data/
+xray/
+xrays/
+uploads/
+
+# Images generated locally
+*.dcm
+*.dicom
+
+# =========================
+# Secrets / Certificates
+# =========================
+*.pem
+*.key
+*.p12
+*.pfx
+
+# =========================
+# Tauri signing keys
+# =========================
+src-tauri/*.key
+src-tauri/*.pub
+
+# =========================
+# Test / Coverage
+# =========================
+coverage/
+.nyc_output/
+
+# =========================
+# Local configuration
+# =========================
+*.local
