@@ -1,0 +1,22 @@
+export type Xray={before?:string;after?:string};
+export type XrayImage={id:string;image:string;date:string;bodyArea?:string;title?:string;notes?:string};
+export type Exercise={name:string;frequency:string;duration:string;notes:string};
+export type PayMethod='Cash'|'UPI'|'Card'|'Bank Transfer'|'Other';
+export type Payment={id:string;patientId:string;amount:number;date:string;paymentMethod:PayMethod;reference?:string;notes?:string;createdAt:string};
+export type Visit={id:string;patientId:string;date:string;visitType:string;painScore?:number;mobility?:number;treatment?:string;exercises?:string;notes?:string;createdAt:string};
+export type ApptStatus='Scheduled'|'Completed'|'Cancelled'|'No Show';
+export type Appointment={id:string;patientId:string;date:string;startTime:string;endTime:string;type:string;status:ApptStatus;notes?:string;createdAt:string;updatedAt:string};
+export type ExpenseCat='Equipment'|'Supplies'|'Rent'|'Utilities'|'Marketing'|'Staff'|'Maintenance'|'Other';
+export type Expense={id:string;date:string;category:ExpenseCat;description:string;amount:number;paymentMethod:PayMethod;patientId?:string;notes?:string;createdAt:string};
+export type PlanLog={id:string;date:string;months:number};
+export type Patient={id:string;name:string;age:number;gender:string;phone:string;visitDate:string;condition:string;painBefore:number;painAfter?:number;mobilityBefore:string;mobilityAfter?:string;notes:string;diagnosis:string;doctor:string;planMonths:number;followUpDate:string;xray:Xray;exercises:Exercise[];status:'Active'|'Completed'|'Follow-up';fee?:number;paid?:number;paymentStatus?:'Done'|'Pending'|'Partially paid';visits?:Visit[];payments?:Payment[];xrays?:XrayImage[];planLog?:PlanLog[]};
+
+export const PAY_METHODS:PayMethod[]=['Cash','UPI','Card','Bank Transfer','Other'];
+export const EXPENSE_CATS:ExpenseCat[]=['Equipment','Supplies','Rent','Utilities','Marketing','Staff','Maintenance','Other'];
+export const APPT_STATUS:ApptStatus[]=['Scheduled','Completed','Cancelled','No Show'];
+export const APPT_TYPES=['Initial assessment','Follow-up','Rehabilitation','Therapy session','Consultation'];
+export const VISIT_TYPES=['Initial assessment','Follow-up','Rehabilitation','Therapy session','Consultation'];
+export type TimelineKind='visit'|'appointment'|'payment'|'xray'|'plan'|'registration';
+export type TimelineEvent={id:string;kind:TimelineKind;date:string;time?:string;title:string;detail?:string;status?:string;amount?:number};
+export type Page='dashboard'|'patients'|'patient'|'appointments'|'payments'|'expenses'|'outcomes'|'settings';
+export type Tab='overview'|'visits'|'timeline'|'plan'|'imaging'|'progress'|'payments'|'report';
