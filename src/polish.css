@@ -1,0 +1,31 @@
+/* Dashboard and outcomes refinements */
+.hero{display:none}
+.follow{width:100%;min-width:0;gap:13px;padding:13px 10px;border-radius:9px;transition:background .18s ease,transform .18s ease}
+.follow:hover{background:#f6f9fd;transform:translateX(2px)}
+.follow:focus-visible{outline:2px solid #1d63be;outline-offset:2px}
+.follow .dateBox{flex:0 0 46px;width:46px;height:46px;background:#f0f5fb;color:#1d63be}
+.follow div:nth-child(2){min-width:0}
+.follow div:nth-child(2) b,.follow div:nth-child(2) span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.arrow{display:flex;align-items:center;gap:7px;white-space:nowrap;padding:7px 10px;border-radius:8px;background:#f4f7fa;color:#4d6078}
+.follow:hover .arrow{background:#eaf2ff;color:#1d63be}
+.trendChart{animation:chartEnter .75s cubic-bezier(.2,.75,.25,1) both}
+.chartLine{stroke-dasharray:900;stroke-dashoffset:900;animation:drawTrend 1.25s .15s ease forwards}
+.chartDot{opacity:0;animation:showDot .25s ease forwards;animation-delay:calc(.35s + var(--dot-index,0)*.08s)}
+.compareBars{display:grid;gap:18px;margin:18px 0}
+.compareBars>div{display:grid;grid-template-columns:54px 1fr auto;gap:12px;align-items:center}
+.compareBars span{font-size:var(--font-size-xs);color:#8490a1;font-weight:var(--font-weight-semibold)}
+.compareBars b{font-size:var(--font-size-sm);font-variant-numeric:tabular-nums}
+.compareTrack{height:10px;border-radius:99px;background:#edf1f5;overflow:hidden}
+.compareTrack i{display:block;height:100%;border-radius:inherit;background:#1d63be;transform-origin:left;animation:growBar .9s .1s cubic-bezier(.2,.75,.25,1) both}
+.compareTrack.after i{background:#198754}
+@keyframes chartEnter{from{opacity:.25;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes drawTrend{to{stroke-dashoffset:0}}
+@keyframes showDot{to{opacity:1}}
+@keyframes growBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media(prefers-reduced-motion:reduce){.trendChart,.chartLine,.chartDot,.compareTrack i{animation:none;opacity:1;stroke-dashoffset:0}}
+@media(max-width:560px){.follow{gap:9px;padding-inline:3px}.arrow{font-size:0;padding:8px}.arrow span{font-size:16px}.compareBars>div{grid-template-columns:44px 1fr auto;gap:8px}}
+html[data-theme="dark"] .follow:hover{background:#202e40}
+html[data-theme="dark"] .follow .dateBox{background:#1d3552;color:#8abaff}
+html[data-theme="dark"] .arrow{background:#202e40;color:#b2bfd0}
+html[data-theme="dark"] .follow:hover .arrow{background:#1d3552;color:#8abaff}
+html[data-theme="dark"] .compareTrack{background:#2c3949}

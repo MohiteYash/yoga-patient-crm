@@ -15,7 +15,7 @@ export const weekDay=(d?:string)=>parseDate(d).toLocaleDateString('en-IN',{weekd
 export const monthKey=(d?:string)=>String(d||'').slice(0,7);
 export const monthStart=(d?:string)=>monthKey(d)+'-01';
 export const monthEnd=(d?:string)=>{const v=parseDate(d);return dayKey(new Date(v.getFullYear(),v.getMonth()+1,0))};
-export const money=(n?:number)=>'INR '+(Number(n)||0).toLocaleString('en-IN');
+export const money=(n?:number)=>'₹'+(Number(n)||0).toLocaleString('en-IN');
 export const num=(v:unknown,fallback=0)=>{const n=Number(v);return isFinite(n)?n:fallback};
 export const isNum=(v:unknown):v is number=>typeof v==='number'&&isFinite(v);
 export const isBlank=(v:unknown)=>v==null||(typeof v==='string'&&v.trim()==='');
