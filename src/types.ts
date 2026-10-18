@@ -9,7 +9,7 @@ export type Appointment={id:string;patientId:string;date:string;startTime:string
 export type ExpenseCat='Equipment'|'Supplies'|'Rent'|'Utilities'|'Marketing'|'Staff'|'Maintenance'|'Other';
 export type Expense={id:string;date:string;category:ExpenseCat;description:string;amount:number;paymentMethod:PayMethod;patientId?:string;notes?:string;createdAt:string};
 export type PlanLog={id:string;date:string;months:number};
-export type Patient={id:string;name:string;age:number;gender:string;phone:string;visitDate:string;condition:string;painBefore:number;painAfter?:number;mobilityBefore:string;mobilityAfter?:string;notes:string;diagnosis:string;doctor:string;planMonths:number;followUpDate:string;xray:Xray;exercises:Exercise[];status:'Active'|'Completed'|'Follow-up';fee?:number;paid?:number;paymentStatus?:'Done'|'Pending'|'Partially paid';visits?:Visit[];payments?:Payment[];xrays?:XrayImage[];planLog?:PlanLog[]};
+export type Patient={id:string;name:string;age:number;gender:string;phone:string;visitDate:string;condition:string;painBefore:number;painAfter?:number;mobilityBefore:string;mobilityAfter?:string;notes:string;diagnosis:string;doctor:string;planMonths:number;followUpDate:string;xray:Xray;exercises:Exercise[];status:'Active'|'Completed'|'Follow-up';history?:Record<string,string>;fee?:number;paid?:number;paymentStatus?:'Done'|'Pending'|'Partially paid';visits?:Visit[];payments?:Payment[];xrays?:XrayImage[];planLog?:PlanLog[]};
 
 export const PAY_METHODS:PayMethod[]=['Cash','UPI','Card','Bank Transfer','Other'];
 export const EXPENSE_CATS:ExpenseCat[]=['Equipment','Supplies','Rent','Utilities','Marketing','Staff','Maintenance','Other'];
