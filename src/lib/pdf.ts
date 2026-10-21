@@ -5,6 +5,7 @@ import {balanceOf, feeOf, ledgerOf, paidOf, statusOf} from './payment';
 // Move the two big base64 constants (FONT_R, FONT_B) out of this file into ./pdfFonts.ts
 // and `export` them. They are only needed for the rupee sign in the payment section.
 import {FONT_R, FONT_B} from './pdfFonts';
+import {INTAKE_LABELS, INTAKE_SECTIONS} from './intake';
 
 const C={ink:'#142033',muted:'#8490a1',primary:'#1d63be',line:'#e4eaf1',tint:'#eef4fb',zebra:'#f6f9fc',green:'#198754',red:'#d9363e'};
 const MX=16,MW=178,PAGE_W=210,BOTTOM=280;
@@ -435,4 +436,21 @@ export async function exportPDF(p:Patient){
   } as Patient;
   const doc=buildReport(q);
   doc.save([p.id,p.name.replace(/\s+/g,'-'),'report.pdf'].join('-'));
+}
+
+export function exportIntakePDF(p:Patient){
+  const doc=new jsPDF({unit:'mm',format:'a4',compress:true});
+  const left=16,width=178,bottom=278;let y=24;
+  const pageHeader=()=>{doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(C.primary);doc.text('YOGACARE | PATIENT INTAKE',left,12);doc.setFont('helvetica','normal');doc.setTextColor(C.muted);doc.text(p.id,PAGE_W-left,12,{align:'right'});doc.setDrawColor(C.line);doc.line(left,16,PAGE_W-left,16)};
+  const ensure=(height:number)=>{if(y+height<=bottom)return;doc.addPage();pageHeader();y=24};
+  const heading=(title:string)=>{ensure(13);y+=4;doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(C.primary);doc.text(title,left,y);y+=7};
+  const item=(label:string,value:string)=>{const lines=doc.splitTextToSize(value||'Not recorded',width-2);const height=5+lines.length*4.2;ensure(height);doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(C.muted);doc.text(label,left,y);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(C.ink);doc.text(lines,left,y+4);y+=height+3;};
+  pageHeader();doc.setFont('helvetica','bold');doc.setFontSize(19);doc.setTextColor(C.ink);doc.text('Patient intake details',left,y);y+=9;doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(C.muted);doc.text('Generated '+dateLabel(),left,y);y+=5;
+  heading('Patient details');
+  [['Patient name',p.name],['Patient ID',p.id],['Age',p.age?String(p.age):''],['Gender',p.gender],['Phone',p.phone],['Date of joining',p.visitDate],['Main concern',p.condition],['Pain today',p.painBefore+'/10'],['Diagnosis',p.diagnosis],['Therapist',p.doctor],['Clinical notes',p.notes]].forEach(([label,value])=>item(label,String(value||'')));
+  const seen=new Set<string>();
+  INTAKE_SECTIONS.forEach(section=>{const answered=section.questions.filter(q=>p.history?.[q.key]?.trim());if(!answered.length)return;heading(section.title);answered.forEach(q=>{seen.add(q.key);item(q.label,p.history?.[q.key]||'')})});
+  Object.entries(p.history||{}).filter(([key,value])=>value&&!seen.has(key)).forEach(([key,value])=>item(INTAKE_LABELS[key]||key,value));
+  const pages=doc.getNumberOfPages();for(let i=1;i<=pages;i++){doc.setPage(i);doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(C.muted);doc.text('Confidential patient information',left,289);doc.text('Page '+i+' of '+pages,PAGE_W-left,289,{align:'right'})}
+  doc.save([p.id,p.name.replace(/\s+/g,'-'),'intake.pdf'].join('-'));
 }
