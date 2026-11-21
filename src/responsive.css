@@ -1,0 +1,291 @@
+.app {
+  --sidebar-width: clamp(12rem, 17vw, 15.3125rem);
+  --page-gutter: clamp(1rem, 2.4vw, 2.125rem);
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  overflow-y: auto;
+}
+
+.main {
+  width: calc(100% - var(--sidebar-width));
+  margin-left: var(--sidebar-width);
+}
+
+.topbar {
+  min-height: 76px;
+  height: auto;
+  gap: 16px;
+  padding: 12px var(--page-gutter);
+}
+
+.topbarHeading,
+.topActions,
+.patientIdentity > div:last-child,
+.stat > div:last-child,
+.cardHead > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.topActions .search {
+  width: clamp(10rem, 21vw, 17rem);
+}
+
+.search input {
+  min-width: 0;
+}
+
+.topActions .iconBtn,
+.search svg,
+.statIcon,
+.bigAvatar,
+.cardHead > button {
+  flex-shrink: 0;
+}
+
+.content {
+  padding: clamp(1rem, 2.15vw, 1.875rem) var(--page-gutter) 36px;
+}
+
+.stats,
+.stats.four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.grid2 {
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+}
+
+.detailGrid:not(.one),
+.settingsGrid,
+.formGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.card,
+.field {
+  min-width: 0;
+}
+
+.field :is(input, select, textarea) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.patientHeader,
+.nameLine {
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.headerBtns {
+  flex-wrap: wrap;
+}
+
+.tabs {
+  gap: 4px clamp(12px, 1.6vw, 22px);
+  flex-wrap: wrap;
+}
+
+.table {
+  overflow-x: auto;
+}
+
+.table .tr > :not(.rowActions) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.wide .tr {
+  min-width: 660px;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.2fr) minmax(0, 1.1fr) .8fr .8fr .7fr;
+}
+
+.wide .tr > :nth-child(6),
+.paymentTable .tr > :last-child {
+  display: revert;
+}
+
+.paymentTable .tr {
+  min-width: 600px;
+  grid-template-columns: minmax(0, 1.35fr) 1fr 1fr .8fr .8fr;
+}
+
+.paymentHistoryTable .tr,
+.apptTable .tr {
+  min-width: 620px;
+}
+
+.expenseTable .tr {
+  min-width: 680px;
+}
+
+.modalWrap {
+  --dialog-padding: clamp(10px, 2vw, 24px);
+  padding: var(--dialog-padding);
+}
+
+.modalWrap > .modal {
+  max-height: calc(100vh - 2 * var(--dialog-padding));
+  overflow-y: auto;
+}
+
+.modalWrap > .intakeModal {
+  overflow: hidden;
+}
+
+.intakeModal > .modalHead,
+.intakeModal > .intakeFooter {
+  flex-shrink: 0;
+}
+
+.intakeFooter {
+  flex-wrap: wrap;
+}
+
+.patientEditor {
+  width: min(800px, 100%);
+}
+
+.patientEditor > .patientEditorBody {
+  display: block;
+  padding: 0 clamp(16px, 2.5vw, 24px) 20px;
+}
+
+.editSection + .editSection {
+  border-top: 1px solid var(--line, #e6ebf2);
+  margin-top: 18px;
+  padding-top: 16px;
+}
+
+.editSection h4 {
+  margin: 0 0 10px;
+  font-size: var(--font-size-md);
+}
+
+.backupPath {
+  overflow-wrap: anywhere;
+}
+
+.pdfNotice {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 12;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px 16px;
+  align-items: start;
+  width: min(450px, calc(100vw - 32px));
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 8px 28px #15284129;
+}
+
+.pdfNoticeDetails {
+  display: grid;
+  gap: 4px;
+  line-height: var(--line-height-body);
+}
+
+.pdfNotice .close {
+  grid-area: 1 / 2;
+}
+
+.pdfNotice .secondary {
+  justify-self: start;
+}
+
+.pdfNoticeDetails span {
+  font-size: var(--font-size-sm);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1150px) {
+  .grid2,
+  .expenseGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .stats,
+  .stats.four {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1000px) {
+  .detailGrid:not(.one),
+  .settingsGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 840px) {
+  .app {
+    --sidebar-width: 68px;
+  }
+
+  .sidebar {
+    padding: 15px 8px;
+  }
+
+  .brand {
+    justify-content: center;
+    padding: 0 0 16px;
+  }
+
+  .brand > div:last-child,
+  .sidebar .nav > span:last-child,
+  .sidebar .newBtn > span,
+  .sidebar .doctor > div:last-child {
+    display: none;
+  }
+
+  .sidebar .nav,
+  .sidebar .doctor {
+    justify-content: center;
+    padding-inline: 0;
+  }
+}
+
+@media (max-width: 660px) {
+  .topbar {
+    position: static;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .topActions {
+    width: 100%;
+  }
+
+  .topActions .search {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+  }
+
+  .content .formGrid,
+  .patientEditor .formGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-height: 720px) {
+  .sidebar {
+    padding-block: 14px;
+  }
+
+  .brand {
+    padding-bottom: 14px;
+  }
+
+  .newBtn {
+    margin-bottom: 11px;
+  }
+}

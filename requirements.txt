@@ -1,0 +1,58 @@
+YogaCare CRM - Client installation requirements
+================================================
+
+Windows
+-------
+- Use Windows 11 or Windows 10 with a current Microsoft Edge WebView2
+  Evergreen Runtime. Run the YogaCare CRM setup .exe. The GitHub build
+  targets 64-bit Windows PCs with Intel or AMD processors (x64).
+- Windows 11 already includes WebView2. If the runtime is missing, the
+  YogaCare CRM installer downloads and installs it over the internet.
+- On an offline PC without WebView2, use another computer to download the
+  Evergreen Standalone Installer for the PC's architecture. Transfer it to
+  the offline PC and run it before the YogaCare CRM setup.
+  https://developer.microsoft.com/en-us/microsoft-edge/webview2/
+
+macOS
+-----
+- Use an up-to-date version of macOS. Open the YogaCare CRM .dmg and drag
+  the app to Applications. The GitHub build targets Apple silicon Macs.
+  Intel Macs require an Intel or universal build.
+- The app uses the WebKit runtime included with macOS. System updates keep
+  this runtime current.
+
+Day-to-day use
+--------------
+- The app runs offline after installation and stores records locally on
+  the computer. Allow disk space for records, X-rays, PDF exports and
+  backups, and use a writable folder for exports and backups.
+- The installer includes the application libraries and PDF export tools.
+  A PDF viewer is optional for opening exported reports outside the app.
+- To set a location for PDFs, open Settings, find PDF output folder, and
+  select Choose folder. The app remembers the selected folder and uses
+  Patient Intake and Patient Reports subfolders. Restore default returns
+  to Documents/YogaCare CRM. After each save the app shows the full file
+  path and an Open folder button.
+- The installed app works without a separate database, server, browser
+  installation or online account. Node.js, npm, Rust, Microsoft C++ Build
+  Tools and Xcode are used only for building from source.
+
+Patient data and backups
+------------------------
+- Live records are stored under the current user's account in the app's
+  WebView local storage. On macOS the installed app uses WebKit data under
+  ~/Library/WebKit/com.yogacare.crm/WebsiteData. On Windows WebView2 data
+  lives under %LOCALAPPDATA%\com.yogacare.crm\EBWebView.
+- In Settings, open Patient data and backups and select Create backup.
+  Use Open backup folder to find the JSON file. The default backup folder
+  is ~/Library/Application Support/com.yogacare.crm/backups on macOS and
+  %APPDATA%\com.yogacare.crm\backups on Windows.
+- Use Restore backup in Settings to load a saved JSON file. Keep a secure
+  copy outside the computer. The JSON contains patient data in plain text.
+
+Runtime references
+------------------
+https://v2.tauri.app/distribute/windows-installer/#webview2-installation-options
+https://v2.tauri.app/reference/webview-versions/
+https://docs.github.com/en/actions/reference/runners/github-hosted-runners#supported-runners-and-hardware-resources
+https://github.com/WebKit/WebKit/blob/main/Source/WebKit/UIProcess/WebsiteData/Cocoa/WebsiteDataStoreCocoa.mm

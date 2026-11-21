@@ -1,9 +1,8 @@
 import {jsPDF} from 'jspdf';
+import {invoke, isTauri} from '@tauri-apps/api/core';
 import type {Exercise, Patient} from '../types';
 import {dateLabel, dayLabel, isNum, num, sortDateAsc, sortDateDesc} from './format';
 import {balanceOf, feeOf, ledgerOf, paidOf, statusOf} from './payment';
-// Move the two big base64 constants (FONT_R, FONT_B) out of this file into ./pdfFonts.ts
-// and `export` them. They are only needed for the rupee sign in the payment section.
 import {FONT_R, FONT_B} from './pdfFonts';
 import {INTAKE_LABELS, INTAKE_SECTIONS} from './intake';
 
@@ -428,17 +427,36 @@ export function buildReport(p:Patient){
   return doc;
 }
 
-export async function exportPDF(p:Patient){
+export type PdfKind = 'intake' | 'report';
+
+function filenamePart(value: string, maxLength: number): string {
+  const clean = value.replace(/[\s<>:"/\\|?*.\u0000-\u001F\u007F-\u009F]+/g, '-');
+  return [...clean].slice(0, maxLength).join('').replace(/^-+|-+$/g, '');
+}
+
+export async function savePatientPdf(patient: Patient, kind: PdfKind): Promise<string | null> {
+  const doc = kind === 'intake' ? buildIntake(patient) : await buildReportForExport(patient);
+  const id = filenamePart(patient.id, 20) || 'patient';
+  const name = filenamePart(patient.name, 32) || 'record';
+  const filename = `${id}-${name}-${kind}.pdf`;
+  if (isTauri()) {
+    const bytes = Array.from(new Uint8Array(doc.output('arraybuffer')));
+    return invoke<string>('save_patient_pdf', {kind, filename, bytes});
+  }
+  doc.save(filename);
+  return null;
+}
+
+async function buildReportForExport(p:Patient){
   // Downscale/re-encode images first so the PDF stays small (typically < 2 MB).
   const q:Patient={...p,
     xray:p.xray?{...p.xray,before:await shrink(p.xray.before),after:await shrink(p.xray.after)}:p.xray,
     xrays:await Promise.all((p.xrays||[]).map(async r=>({...r,image:await shrink(r.image)}))),
   } as Patient;
-  const doc=buildReport(q);
-  doc.save([p.id,p.name.replace(/\s+/g,'-'),'report.pdf'].join('-'));
+  return buildReport(q);
 }
 
-export function exportIntakePDF(p:Patient){
+function buildIntake(p:Patient){
   const doc=new jsPDF({unit:'mm',format:'a4',compress:true});
   const left=16,width=178,bottom=278;let y=24;
   const pageHeader=()=>{doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(C.primary);doc.text('YOGACARE | PATIENT INTAKE',left,12);doc.setFont('helvetica','normal');doc.setTextColor(C.muted);doc.text(p.id,PAGE_W-left,12,{align:'right'});doc.setDrawColor(C.line);doc.line(left,16,PAGE_W-left,16)};
@@ -452,5 +470,5 @@ export function exportIntakePDF(p:Patient){
   INTAKE_SECTIONS.forEach(section=>{const answered=section.questions.filter(q=>p.history?.[q.key]?.trim());if(!answered.length)return;heading(section.title);answered.forEach(q=>{seen.add(q.key);item(q.label,p.history?.[q.key]||'')})});
   Object.entries(p.history||{}).filter(([key,value])=>value&&!seen.has(key)).forEach(([key,value])=>item(INTAKE_LABELS[key]||key,value));
   const pages=doc.getNumberOfPages();for(let i=1;i<=pages;i++){doc.setPage(i);doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(C.muted);doc.text('Confidential patient information',left,289);doc.text('Page '+i+' of '+pages,PAGE_W-left,289,{align:'right'})}
-  doc.save([p.id,p.name.replace(/\s+/g,'-'),'intake.pdf'].join('-'));
+  return doc;
 }

@@ -6,6 +6,12 @@ export const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','N
 const pad=(n:number)=>String(n).padStart(2,'0');
 export const dayKey=(d:Date)=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
 export const today=()=>dayKey(new Date());
+export function greeting(date: Date) {
+  const hour = date.getHours();
+  if (hour < 12) return 'Good morning';
+  if (hour < 17) return 'Good afternoon';
+  return 'Good evening';
+}
 export const parseDate=(d?:string)=>{const p=String(d||'').split('-').map(Number);return p[0]&&p[1]?new Date(p[0],p[1]-1,p[2]||1):new Date()};
 export const addDays=(d:string,n:number)=>{const v=parseDate(d);return dayKey(new Date(v.getFullYear(),v.getMonth(),v.getDate()+n))};
 export const dateLabel=(d?:string)=>{const v=parseDate(d);return v.getDate()+' '+MON[v.getMonth()]+' '+v.getFullYear()};

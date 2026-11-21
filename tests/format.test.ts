@@ -1,7 +1,15 @@
 import {describe,expect,it,vi} from 'vitest';
-import {addDays,dayKey,monthEnd,money,num,patientId,timeLabel} from '../src/lib/format';
+import {addDays,dayKey,greeting,monthEnd,money,num,patientId,timeLabel} from '../src/lib/format';
 
 describe('date, number, id, and display format edge cases',()=>{
+ it('uses local hours at the greeting boundaries',()=>{
+  const dateAt=(hour:number, minute=0)=>new Date(2026,0,1,hour,minute);
+  expect(greeting(dateAt(0))).toBe('Good morning');
+  expect(greeting(dateAt(11,59))).toBe('Good morning');
+  expect(greeting(dateAt(12))).toBe('Good afternoon');
+  expect(greeting(dateAt(16,59))).toBe('Good afternoon');
+  expect(greeting(dateAt(17))).toBe('Good evening');
+ });
  it('adds days across month/year boundaries and leap day',()=>{
   expect(addDays('2026-01-31',1)).toBe('2026-02-01');
   expect(addDays('2026-12-31',1)).toBe('2027-01-01');
